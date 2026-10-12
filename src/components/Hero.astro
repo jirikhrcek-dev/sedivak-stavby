@@ -1,0 +1,137 @@
+---
+import { contact } from '../data/site.js';
+
+const STATS = [
+  { num: '47+', label: 'Dokončených projektů' },
+  { num: '7 let', label: 'Zkušeností v oboru' },
+  { num: '100%', label: 'Spokojených klientů' },
+];
+
+// Fotky na pozadí – střídá je skript. Vybrané tak, aby držely pod tónováním.
+const PHOTOS = [
+  '/images/gallery/r/foto-05', // podhled plechové střechy
+  '/images/gallery/r/foto-07', // pokládka tašek proti obloze
+  '/images/gallery/r/foto-14', // rozestavěný dům v celku
+  '/images/gallery/r/foto-08', // podkroví, vazba krovu
+  '/images/gallery/r/foto-04', // chlapi u kolečka
+];
+---
+<section id="home" class="relative bg-stone-950 overflow-hidden min-h-screen">
+  {PHOTOS.map((src, i) => (
+    <img
+      src={i === 0 ? `${src}-800.webp` : undefined}
+      srcset={i === 0 ? `${src}-800.webp 800w, ${src}-1600.webp 1600w` : undefined}
+      data-src={i === 0 ? undefined : `${src}-800.webp`}
+      data-srcset={i === 0 ? undefined : `${src}-800.webp 800w, ${src}-1600.webp 1600w`}
+      sizes="100vw"
+      alt=""
+      aria-hidden="true"
+      fetchpriority={i === 0 ? 'high' : 'low'}
+      decoding="async"
+      class:list={['hero-img absolute inset-0 w-full h-full object-cover hero2-photo hero-slide', { 'hero-slide--on': i === 0 }]}
+    />
+  ))}
+  <div class="absolute inset-0 hero2-tint"></div>
+  <div class="absolute inset-0 hero2-dark"></div>
+  <div class="absolute inset-x-0 top-0 h-40 pointer-events-none" style="background: linear-gradient(to bottom, rgba(12,10,9,0.85), transparent)"></div>
+
+  <div class="relative z-10 mx-auto grid min-h-screen w-full max-w-6xl grid-cols-1 items-center gap-y-14 px-6 pt-28 pb-20 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-x-10 xl:gap-x-16">
+    <div>
+      <div class="inline-flex items-center gap-2.5 border border-stone-500/60 bg-stone-950/30 backdrop-blur-sm px-4 py-2 mb-8 w-fit">
+        <span class="relative flex h-2.5 w-2.5">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-500 opacity-60"></span>
+          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand-500"></span>
+        </span>
+        <span class="text-stone-200 text-xs md:text-sm uppercase tracking-[0.2em] font-body">Plzeňský kraj · od roku 2018</span>
+      </div>
+
+      <h1 class="text-white mb-6 text-balance">
+        <span class="block h-display">Stavíme</span>
+        <span class="block h-display text-brand-400">kvalitně,</span>
+        <span class="block h2 text-stone-200 mt-3">na čas a bez starostí.</span>
+      </h1>
+
+      <p class="lead text-stone-200 font-body font-light mb-10">
+        Rekonstrukce, hrubé stavby, zednické práce – realizujeme projekty od základů
+        po střechu. Poctivá práce s garancí kvality.
+      </p>
+
+      <div class="flex flex-wrap gap-4">
+        <a href="#kontakt" class="btn btn-primary">Nezávazná poptávka →</a>
+        <a href="#projekty" class="btn btn-outline text-stone-100 hover:!text-brand-400 hover:!border-brand-400">Naše projekty</a>
+      </div>
+    </div>
+
+    <!-- Vizitka: přední strana logo, zadní statistiky a kontakt -->
+    <div class="hidden lg:block justify-self-end">
+      <div class="animate-float">
+        <div id="logo-tilt" class="logo-card-scene w-[20rem] h-[13rem] xl:w-[23rem] xl:h-[14.5rem]" style="perspective: 1400px">
+          <div class="logo-card h-full w-full">
+            <div class="logo-card__face absolute inset-0 flex items-center justify-center">
+              <img
+                src="/images/logo-zlate-800.webp"
+                srcset="/images/logo-zlate-400.webp 400w, /images/logo-zlate-800.webp 800w"
+                sizes="(min-width: 1280px) 480px, 384px"
+                alt="Šedivák Stavby s.r.o"
+                width="800"
+                height="411"
+                class="w-full h-auto"
+                style="filter: drop-shadow(0 0 28px rgba(255,255,255,0.22)) drop-shadow(0 10px 26px rgba(0,0,0,0.6))"
+              />
+            </div>
+
+            <div class="logo-card__face logo-card__back rounded-2xl border border-brand-400/30 bg-gradient-to-br from-stone-900 via-stone-950 to-stone-900 shadow-[0_0_30px_rgba(201,179,101,0.35)] flex flex-col justify-between p-5 xl:p-6">
+              <div>
+                <div class="font-display uppercase tracking-[0.2em] text-brand-400 text-[0.65rem] xl:text-[0.7rem]">Šedivák Stavby s.r.o.</div>
+                <div class="h-px bg-brand-400/30 my-3 xl:my-4"></div>
+                <div class="grid grid-cols-3 gap-2">
+                  {STATS.map((s) => (
+                    <div>
+                      <div class="font-display font-bold text-white text-xl xl:text-2xl leading-none mb-1">{s.num}</div>
+                      <div class="font-display uppercase tracking-wide text-stone-400 text-[0.58rem] xl:text-[0.62rem] leading-tight">{s.label}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div class="space-y-1.5 text-xs xl:text-[0.8rem]">
+                <a href={contact.phoneHref} class="flex items-center gap-2 text-stone-200 hover:text-brand-400 transition-colors"><span class="text-brand-400">☎</span> {contact.phone}</a>
+                <a href={`mailto:${contact.email}`} class="flex items-center gap-2 text-stone-200 hover:text-brand-400 transition-colors"><span class="text-brand-400">✉</span> {contact.email}</a>
+                <div class="flex items-center gap-2 text-stone-400"><span class="text-brand-400">⌖</span> Plzeňský kraj · od roku 2018</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import VanillaTilt from 'vanilla-tilt';
+
+  const slides = [...document.querySelectorAll('.hero-img')];
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Zbylé fotky až po chvíli, ať neberou pásmo první
+  if (!reduced && slides.length > 1) {
+    setTimeout(() => {
+      for (const img of slides) {
+        if (img.dataset.src) {
+          img.srcset = img.dataset.srcset;
+          img.src = img.dataset.src;
+        }
+      }
+    }, 1200);
+    let i = 0;
+    setInterval(() => {
+      slides[i].classList.remove('hero-slide--on');
+      i = (i + 1) % slides.length;
+      slides[i].classList.add('hero-slide--on');
+    }, 5000);
+  }
+
+  const tilt = document.getElementById('logo-tilt');
+  if (tilt && matchMedia('(min-width: 1024px)').matches) {
+    VanillaTilt.init(tilt, { max: 12, perspective: 900, speed: 500, scale: 1.03, glare: false, reset: true });
+  }
+</script>

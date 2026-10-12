@@ -1,0 +1,47 @@
+---
+import Base from '../layouts/Base.astro';
+import { contact } from '../data/site.js';
+---
+<Base
+  title="Stránka nenalezena | Šedivák Stavby"
+  description="Požadovaná stránka neexistuje. Přejděte na hlavní stránku Šedivák Stavby s.r.o."
+  path="/404"
+  noindex
+>
+  <main id="obsah" class="min-h-screen flex items-center pt-24 pb-[var(--section-y)]">
+    <div class="max-w-6xl mx-auto px-6 w-full">
+      <div class="sheet max-w-2xl mx-auto">
+        <div class="sheet-head">
+          <span style="color: var(--accent-text)">Chyba 404</span>
+          <span style="color: var(--text-muted)">Stránka nenalezena</span>
+        </div>
+        <div class="p-6 md:p-10">
+          <p class="eyebrow mb-2">Slepá ulička</p>
+          <h1 class="h2 mb-4" style="color: var(--text)">Tuhle stránku jsme nenašli</h1>
+          <p class="font-body measure mb-8" style="color: var(--text-muted)">
+            Odkaz je nejspíš zastaralý nebo v adrese chybí písmenko. Zkuste
+            hlavní stránku, nebo nám rovnou napište – ozveme se do 24 hodin.
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <a href="/" class="btn btn-primary min-h-[48px]">Hlavní stránka</a>
+            <a href="/fotografie" class="btn btn-outline min-h-[48px] text-stone-600">Fotogalerie realizací</a>
+          </div>
+        </div>
+        <div class="titleblock">
+          <div class="titleblock-cell">
+            <div class="titleblock-label">Telefon</div>
+            <a href={contact.phoneHref} class="titleblock-value">{contact.phone}</a>
+          </div>
+          <div class="titleblock-cell">
+            <div class="titleblock-label">E-mail</div>
+            <a href={`mailto:${contact.email}`} class="titleblock-value">{contact.email}</a>
+          </div>
+          <div class="titleblock-cell">
+            <div class="titleblock-label">Pracovní doba</div>
+            <div class="titleblock-value">{contact.hours}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</Base>

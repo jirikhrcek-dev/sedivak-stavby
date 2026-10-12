@@ -1,0 +1,738 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ══════════════════════════════════════════════════════════════
+   FONTY – self-hosted (žádný render-blocking Google link)
+   Inter = body/UI, Archivo = display/nadpisy. Variabilní řezy,
+   latin + latin-ext kvůli české diakritice.
+   ══════════════════════════════════════════════════════════════ */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('/fonts/inter-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('/fonts/inter-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('/fonts/archivo-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('/fonts/archivo-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   DESIGN TOKENY
+   ══════════════════════════════════════════════════════════════ */
+:root {
+  /* Fonty */
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Archivo', 'Arial Narrow', system-ui, sans-serif;
+
+  /* Typografická škála – modulární 1.25, fluid clamp(mobil → desktop) */
+  --fs-display: clamp(2.75rem, 1.4rem + 6vw, 6rem);      /* 44 → 96 */
+  --fs-h1:      clamp(2rem, 1.3rem + 3.1vw, 3.5rem);     /* 32 → 56 */
+  --fs-h2:      clamp(1.75rem, 1.25rem + 2.4vw, 2.75rem);/* 28 → 44 */
+  --fs-h3:      clamp(1.3rem, 1.05rem + 1.1vw, 1.75rem); /* ~21 → 28 */
+  --fs-body-lg: clamp(1.125rem, 1.05rem + 0.35vw, 1.25rem);
+  --fs-body:    1.0625rem;                               /* 17 */
+  --fs-small:   0.875rem;                                /* 14 */
+  --fs-caption: 0.75rem;                                 /* 12 */
+
+  /* Line-height */
+  --lh-display: 0.95;
+  --lh-heading: 1.08;
+  --lh-body:    1.65;
+
+  /* Letter-spacing */
+  --ls-display: -0.03em;
+  --ls-heading: -0.02em;
+  --ls-eyebrow:  0.2em;
+
+  /* Šířky */
+  --container: 72rem;
+  --gutter:    clamp(1.25rem, 0.9rem + 1.6vw, 2rem);
+  --measure:   68ch;
+
+  /* Spacing – 4/8 systém */
+  --space-1: 0.25rem;  --space-2: 0.5rem;  --space-3: 0.75rem;
+  --space-4: 1rem;     --space-6: 1.5rem;  --space-8: 2rem;
+  --space-12: 3rem;    --space-16: 4rem;   --space-24: 6rem;
+  --section-y: clamp(4.5rem, 3rem + 8vw, 8rem);
+
+  /* Rohy – ostré jako industriální podpis */
+  --radius: 0px;
+  --radius-pill: 9999px;
+
+  /* Vyvýšení karet nad rastrem. Dvě vrstvy: úzká pod hranou drží kartu
+     „přisazenou" k podkladu, široká a měkká dělá vlastní odstup od prkna. */
+  --shadow-card:   0 1px 2px rgba(28, 25, 23, 0.05), 0 8px 24px -12px rgba(28, 25, 23, 0.22);
+  --shadow-raised: 0 2px 4px rgba(28, 25, 23, 0.07), 0 18px 40px -16px rgba(28, 25, 23, 0.30);
+  --shadow-flat:   0 1px 2px rgba(28, 25, 23, 0.05), 0 4px 12px -6px rgba(28, 25, 23, 0.16);
+  --shadow-sheet:  0 1px 2px rgba(28, 25, 23, 0.05), 0 24px 60px -24px rgba(28, 25, 23, 0.32);
+
+  /* Barvy – světlý režim (neutrály laděné do teplé „stone") */
+  --bg:              #f5f5f4;
+  --surface:         #ffffff;
+  --surface-2:       #ececeb;
+  --border:          #d6d3d1;
+  --text:            #1c1917;
+  --text-muted:      #57534e;
+  /* Značková zlatá, odebraná z polepu firemního auta (#C9B365).
+     Na rozdíl od modré nezvládne jeden odstín text i výplň zároveň:
+       --accent        výplně a rámečky, jen s TMAVÝM textem  (5,7:1)
+       --accent-text   text a odkazy na světlém podkladu      (6,5:1)
+     Bílý text na --accent by měl 3,1:1 a neprošel by. */
+  --accent:          #A8913F;
+  --accent-hover:    #8A7530;
+  --accent-text:     #6E5C25;
+  --accent-contrast: #1c1917;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    font-family: var(--font-body);
+    font-size: var(--fs-body);
+    line-height: var(--lh-body);
+    /* Podklad nese .grid-paper, ne body. Musí to být skutečný element:
+       pozadí body se propaguje na canvas a ten se snímá jako součást kořene,
+       takže by se při přechodu mezi stránkami posouval spolu s obsahem. */
+    background-color: transparent;
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SÉMANTICKÉ TŘÍDY – jediný zdroj typografie a tlačítek
+   (barvu textu řeší dál Tailwind utility podle kontextu)
+   ══════════════════════════════════════════════════════════════ */
+@layer components {
+  .eyebrow {
+    font-family: var(--font-display);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    font-size: var(--fs-caption);
+    color: var(--accent-text);
+  }
+
+  .h-display {
+    font-family: var(--font-display);
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: var(--fs-display);
+    line-height: var(--lh-display);
+    letter-spacing: var(--ls-display);
+  }
+  .h1 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: var(--fs-h1);
+    line-height: var(--lh-heading);
+    letter-spacing: var(--ls-heading);
+  }
+  .h2 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: var(--fs-h2);
+    line-height: var(--lh-heading);
+    letter-spacing: var(--ls-heading);
+  }
+  .h3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: var(--fs-h3);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+  .lead {
+    font-size: var(--fs-body-lg);
+    line-height: 1.6;
+    max-width: var(--measure);
+  }
+  .measure { max-width: var(--measure); }
+
+  /* Tlačítka – jeden systém, dvě velikosti */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: var(--font-display);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: var(--fs-small);
+    line-height: 1;
+    padding: 1rem 2rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+  .btn-sm { padding: 0.625rem 1.25rem; font-size: var(--fs-caption); }
+  .btn-primary { background-color: var(--accent); color: var(--accent-contrast); }
+  .btn-primary:hover { background-color: var(--accent-hover); }
+  .btn-outline { border-color: currentColor; background-color: transparent; }
+  .btn-outline:hover { color: var(--accent-text); border-color: var(--accent-text); }
+}
+
+@layer utilities {
+  .font-display { font-family: var(--font-display); }
+  .font-body { font-family: var(--font-body); }
+}
+
+/* Viditelný focus stav pro klávesnici */
+:focus-visible {
+  outline: 2px solid var(--accent-text);
+  outline-offset: 2px;
+}
+
+/* Pojistka proti vodorovnému přetečení – ať už ho způsobí cokoli, stránka
+   nepůjde odscrollovat doprava. `clip` schválně místo `hidden`: nevytvoří
+   scroll kontejner, takže nerozbije position: sticky. Prvky s position: fixed
+   (lightbox, navbar) tím dotčené nejsou, ty se umisťují vůči viewportu. */
+main > section,
+main > div,
+footer {
+  overflow-x: clip;
+}
+
+/* Přeskočit na obsah – vidět až při tabování */
+.skip-link {
+  position: absolute;
+  left: 0.5rem;
+  top: -100%;
+  z-index: 100;
+  background-color: var(--accent);
+  color: var(--accent-contrast);
+  font-family: var(--font-display);
+  font-size: var(--fs-small);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.75rem 1.25rem;
+  transition: top 0.15s ease;
+}
+.skip-link:focus {
+  top: 0.5rem;
+}
+
+/* Service cards – plochu řeší CSS, protože inline style přebíjí Tailwind */
+.service-card {
+  background-color: var(--surface);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   KARTY – plná plocha nad rastrem
+   Rastr na pozadí prosvítal průhlednými kartami a ty pak splývaly se
+   stránkou. Karta proto dostane vlastní plochu a stín, aby nad prknem
+   ležela jako samostatný list.
+   ══════════════════════════════════════════════════════════════ */
+.card-surface {
+  background-color: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+/* Uvnitř posuvníku referencí se široký stín ořízne o hranu, proto plošší */
+.card-surface--flat {
+  background-color: var(--surface);
+  box-shadow: var(--shadow-flat);
+}
+/* Jen stín, bez plochy – pro dlaždice s fotkou, ta si plochu nese sama */
+.elevate      { box-shadow: var(--shadow-card); }
+.elevate-flat { box-shadow: var(--shadow-flat); }
+
+/* ══════════════════════════════════════════════════════════════
+   POHYB – vše respektuje prefers-reduced-motion (viz konec souboru)
+   ══════════════════════════════════════════════════════════════ */
+.card-zoom {
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+.card-zoom:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-raised);
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up { animation: fadeUp 0.6s ease forwards; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
+}
+.animate-float { animation: float 5s ease-in-out infinite; }
+
+/* --- 3D flip vizitka v hero: přední = logo, zadní = statistiky + kontakt --- */
+/* Perspektivu dává rodičovský wrapper (.logo-card-scene), náklon řeší Vanilla-Tilt. */
+.logo-card {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.logo-card-scene:hover .logo-card {
+  transform: rotateY(180deg);
+}
+.logo-card__face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.logo-card__back {
+  position: absolute;
+  inset: 0;
+  transform: rotateY(180deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .logo-card,
+  .logo-card-scene:hover .logo-card { transition: none; transform: none; }
+}
+
+/* ── Bio karta s hover efektem ──────────────────────────────── */
+.bio-wrapper {
+  position: relative;
+  height: 5.75rem;
+}
+.bio-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  border-left: 4px solid var(--accent);
+  padding-left: 1.5rem;
+  /* Bílá plocha místo průhledné – přes rastr byly kontakty špatně čitelné. */
+  background: var(--surface);
+  box-shadow: var(--shadow-flat);
+  transition:
+    box-shadow     0.45s cubic-bezier(0.4, 0, 0.2, 1),
+    border-left-width 0.3s ease,
+    padding-left   0.3s ease;
+}
+.bio-card:hover {
+  border-left-width: 6px;
+  padding-left: 1.375rem;
+  box-shadow: var(--shadow-raised);
+}
+.bio-face {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.875rem 1.25rem 0.875rem 0;
+}
+.bio-avatar {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  background-color: #e7e5e4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #57534e;
+  flex-shrink: 0;
+  transition:
+    transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.4s ease;
+}
+.bio-card:hover .bio-avatar {
+  transform: scale(1.06) rotate(5deg);
+  box-shadow: 0 0 0 3px rgba(168,145,63,0.28),
+              0 0 20px rgba(168,145,63,0.25);
+}
+.bio-details {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.52s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.bio-card:hover .bio-details {
+  max-height: 180px;
+}
+.bio-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 0.5rem 1.25rem 1.1rem 0;
+  border-top: 1px solid rgba(110,92,37,0.16);
+}
+.bio-item {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  text-decoration: none;
+  opacity: 0;
+  transform: translateY(7px);
+  filter: blur(4px);
+  transition: opacity 0.32s ease, transform 0.32s ease, filter 0.32s ease;
+}
+.bio-card:hover .bio-item:nth-child(1) { opacity: 1; transform: translateY(0); filter: blur(0); transition-delay: 0.11s; }
+.bio-card:hover .bio-item:nth-child(2) { opacity: 1; transform: translateY(0); filter: blur(0); transition-delay: 0.20s; }
+.bio-card:hover .bio-item:nth-child(3) { opacity: 1; transform: translateY(0); filter: blur(0); transition-delay: 0.29s; }
+.bio-card:hover .bio-item:nth-child(4) { opacity: 1; transform: translateY(0); filter: blur(0); transition-delay: 0.37s; }
+
+/* Mobil a dotyková zařízení: hover tu buď není, nebo se chová nespolehlivě.
+   Karta je proto rovnou rozbalená a v běžném toku – absolutní pozicování
+   ji jinak přetáhne přes fotku pod ní a kontakty jsou nedostupné.
+   Pravidla s :hover se musí přebít explicitně, mají vyšší specificitu. */
+@media (max-width: 767.98px), (hover: none) {
+  .bio-wrapper { height: auto; }
+
+  .bio-card,
+  .bio-card:hover {
+    position: static;
+    border-left-width: 4px;
+    padding-left: 1.5rem;
+    background: var(--surface);
+    box-shadow: var(--shadow-flat);
+  }
+  .bio-details,
+  .bio-card:hover .bio-details { max-height: none; }
+
+  .bio-item,
+  .bio-card:hover .bio-item {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none;
+    transition-delay: 0s;
+  }
+
+  .bio-card:hover .bio-avatar { transform: none; box-shadow: none; }
+}
+
+/* Hero bottom gradient */
+.hero-gradient-bottom {
+  background: linear-gradient(to top, var(--bg) 0%, transparent 100%);
+}
+
+/* ── Hero „koncept 2" – duotone full-bleed ──────────────────── */
+.hero2-photo {
+  background-size: cover;
+  background-position: center;
+  filter: grayscale(100%) brightness(0.5) contrast(1.12);
+}
+/* Teplý nádech místo plného duotonu. Zlatá je tmavě žlutá, takže při původní
+   síle 0,75 vycházela přes odbarvenou fotku olivově khaki – ověřeno simulací.
+   Při 0,30 je to jen teplá skoro-monochromie a fotky drží. */
+.hero2-tint {
+  background-color: #C9B365;
+  mix-blend-mode: color;
+  opacity: 0.30;
+}
+.hero2-dark {
+  background: linear-gradient(
+    180deg,
+    rgba(6, 10, 20, 0.5) 0%,
+    rgba(6, 10, 20, 0.38) 45%,
+    rgba(6, 10, 20, 0.72) 100%
+  );
+}
+/* Prolínačka fotek v hero sekci (HERO_MODE = 'fotky').
+   Fotky leží přes sebe, aktivní se prolne a po celou dobu zobrazení se pomalu
+   přibližuje. Přiblížení jede na přechodu, ne na animaci – při odchodu se tak
+   nemá kam „přiskočit" a odcházející fotka jen nepatrně odjede zpět.
+   Přechod je delší než interval střídání, takže se pohyb nikdy nezastaví. */
+.hero-slide {
+  opacity: 0;
+  transform: scale(1.03);
+  transition: opacity 1.4s ease, transform 6.4s ease-out;
+}
+.hero-slide--on {
+  opacity: 1;
+  transform: scale(1.12);
+  will-change: opacity, transform;
+}
+
+/* Stagger delays */
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+
+/* ══════════════════════════════════════════════════════════════
+   KONTAKT – sekce jako stavební výkres
+   Pozadí = milimetrový rastr, formulář = výkresový list,
+   kontaktní údaje = rohové razítko (title block).
+   Vše přes tokeny, takže to drží ve světlém i tmavém režimu.
+   ══════════════════════════════════════════════════════════════ */
+:root {
+  --grid-fine:  rgba(110, 92, 37, 0.10);
+  --grid-major: rgba(110, 92, 37, 0.18);
+}
+
+/* Rýsovací prkno – milimetrový rastr 8px s hrubším dělením po 64px, jeden
+   souvislý podklad přes celou stránku. Žádné vyblednutí ani přechody mezi
+   sekcemi, jinak by na švech byly vidět čáry. Sekce jsou průhledné a rastr
+   jim prosvítá, karty a listy zůstávají plné, takže leží „na prkně".
+
+   Samostatný fixní element, ne pozadí body: pozadí body se propaguje na canvas
+   a ten se do snímku kořene nedostane – při posunu listu by pod ním zůstala
+   průhledná díra. Jako element se do snímku započítá a list je krycí.
+   Vlastní view-transition-name schválně nemá, viz komentář u přechodu níž. */
+.grid-paper {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(to right,  var(--grid-fine)  1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-fine)  1px, transparent 1px),
+    linear-gradient(to right,  var(--grid-major) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-major) 1px, transparent 1px);
+  background-size: 8px 8px, 8px 8px, 64px 64px, 64px 64px;
+}
+
+/* Výkresový list */
+.sheet {
+  position: relative;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sheet);
+}
+.sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border);
+  padding: 0.875rem 1.5rem;
+  font-family: var(--font-display);
+  font-size: var(--fs-caption);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-eyebrow);
+}
+
+/* Pole formuláře */
+.field-label {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--fs-caption);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+}
+.field {
+  width: 100%;
+  background-color: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: var(--fs-small);
+  padding: 0.75rem 1rem;
+  outline: none;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+.field::placeholder { color: var(--text-muted); opacity: 0.65; }
+.field:hover  { border-color: var(--text-muted); }
+.field:focus  { border-color: var(--accent-text); background-color: var(--surface); }
+/* Telefon – rámeček drží celý blok (předvolba + číslo), pole uvnitř je bez okraje.
+   Pořadí je důležité: .field-flush musí přebít .field, proto stojí až za ním. */
+.phone-row {
+  display: flex;
+  border: 1px solid var(--border);
+  transition: border-color 0.2s ease;
+}
+.phone-row:focus-within { border-color: var(--accent-text); }
+.phone-row--error,
+.phone-row--error:focus-within { border-color: #dc2626; }
+.field-flush,
+.field-flush:hover,
+.field-flush:focus { border: 0; }
+
+/* Rohové razítko – tabulka s hairline mřížkou.
+   Linky dělá podklad prosvítající skrz 1px mezery mezi buňkami. */
+.titleblock {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1px;
+  background-color: var(--border);
+  border-top: 1px solid var(--border);
+}
+@media (min-width: 640px) {
+  .titleblock { grid-template-columns: repeat(3, 1fr); }
+}
+.titleblock-cell {
+  background-color: var(--surface);
+  padding: 0.875rem 1.25rem;
+}
+.titleblock-label {
+  font-family: var(--font-display);
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--text-muted);
+  margin-bottom: 0.25rem;
+}
+.titleblock-value {
+  font-family: var(--font-body);
+  font-size: var(--fs-small);
+  color: var(--text);
+  line-height: 1.45;
+}
+/* Telefon a maily jsou odkazy – na mobilu potřebují dost velkou plochu na prst */
+a.titleblock-value {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+a.titleblock-value:hover { color: var(--accent-text); }
+
+/* Potvrzení odeslání – otisk razítka */
+.stamp {
+  display: inline-block;
+  border: 3px solid var(--accent-text);
+  color: var(--accent-text);
+  font-family: var(--font-display);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: clamp(1.25rem, 1rem + 1.4vw, 1.75rem);
+  padding: 0.75rem 1.75rem;
+  transform: rotate(-4deg);
+  animation: stampDown 0.45s cubic-bezier(0.2, 1.4, 0.5, 1) both;
+}
+@keyframes stampDown {
+  from { opacity: 0; transform: rotate(-4deg) scale(1.6); }
+  to   { opacity: 1; transform: rotate(-4deg) scale(1); }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PŘECHOD MEZI STRÁNKAMI – další výkres na prkno
+   Stránka je list na rýsovacím prkně. Vpřed na něj shora dosedne další list
+   a překryje ho; zpátky se ten vrchní zase odsune nahoru a odkryje spodní.
+
+   Žádné prolnutí. Dvě poloprůhledné vrstvy přes sebe dělaly dvojexpozici –
+   snímek kořene je totiž průhledný všude, kde jsou sekce průhledné. Proto se
+   hýbe vždycky jen JEDEN list, ten druhý pod ním nehybně a plně kryje.
+
+   Aby byl posouvaný list neprůhledný, musí být rastr jeho součástí – nesmí
+   mít vlastní view-transition-name, jinak se ze snímku vyjme a zbude
+   průsvitka. Lišta jméno má: je na obou stránkách stejná a přišpendlená
+   nahoře, takže při přechodu stojí a list se posouvá pod ní.
+
+   Prohlížeč bez podpory View Transitions přepne stránku okamžitě.
+   ══════════════════════════════════════════════════════════════ */
+/* Animuje se jenom transform, nic jiného. Stín visí na listu natvrdo jako
+   box-shadow – snímek je obyčejný obdélník, takže vypadá stejně jako
+   drop-shadow, ale nestojí přepočet filtru přes celou obrazovku v každém
+   snímku. Právě to na fotogalerii, kde je snímek plný fotek, sekalo.
+   Dojet nemusí: v cíli sedí spodní hrana listu přesně na spodku okna,
+   takže stín spadne pod ohyb a není ho vidět. */
+/* Přechody mezi stránkami (MPA). Směr sází skript v Base.astro (pagereveal). */
+@view-transition { navigation: auto; }
+
+@keyframes vt-sheet-drop {
+  from { transform: translateY(-100%); }
+  to   { transform: translateY(0); }
+}
+@keyframes vt-sheet-lift {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-100%); }
+}
+
+/* `animation: none` přebíjí prolnutí, které sem dává prohlížeč sám – bez toho
+   by ležící list ještě bledl a prosvítal by skrz. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  mix-blend-mode: normal;
+  animation: none;
+}
+
+/* Vpřed přijíždí nový list, takže musí být navrchu; starý zůstane ležet pod
+   ním. Křivka na konci lehce dosedne, jako když papír dopadne na prkno. */
+::view-transition-old(root) {
+  z-index: 0;
+}
+::view-transition-new(root) {
+  z-index: 1;
+  box-shadow: 0 14px 30px rgba(28, 25, 23, 0.3);
+  animation: vt-sheet-drop 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Zpátky je to obráceně: odjíždí ten vrchní, tedy starý – vrstvy prohodit.
+   Atribut sází usePageTransitionDirection na <html> při každé změně cesty –
+   uvnitř callbacku view transition, ještě než se animace rozběhnou – takže to
+   funguje i pro tlačítko zpět v prohlížeči.
+   Bez kombinátoru: pseudoelementy view transition patří kořenovému elementu. */
+html[data-vt-dir='back']::view-transition-old(root) {
+  z-index: 1;
+  box-shadow: 0 14px 30px rgba(28, 25, 23, 0.3);
+  animation: vt-sheet-lift 340ms cubic-bezier(0.55, 0, 0.85, 0.4) both;
+}
+html[data-vt-dir='back']::view-transition-new(root) {
+  z-index: 0;
+  box-shadow: none;
+  animation: none;
+}
+
+/* Lišta stojí. Bez animace skončí její část přechodu hned a je vidět rovnou
+   nový stav – přesně to „nehnout se". Vyšší z-index ji drží nad posouvaným
+   listem, který by jí jinak přejel přes obličej. */
+::view-transition-group(root)        { z-index: 0; }
+::view-transition-group(site-header) { z-index: 1; animation: none; }
+::view-transition-old(site-header),
+::view-transition-new(site-header) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+.vt-header {
+  view-transition-name: site-header;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Pseudoelementy view transition nechytá hvězdička v bloku níž – žijí
+     mimo běžný strom dokumentu a musí se vypnout zvlášť. */
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   REDUCED MOTION – vypni veškeré animace/přechody
+   ══════════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .stamp { animation: none; }
+  .animate-float { animation: none; }
+}

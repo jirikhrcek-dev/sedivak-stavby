@@ -1,0 +1,166 @@
+---
+import Icon from './Icon.astro';
+
+const GOOGLE_REVIEWS_URL =
+  'https://www.google.com/maps/place/%C5%A0ediv%C3%A1k+elektro+s.r.o./@49.7741794,13.2502103,17z/data=!4m8!3m7!1s0x470a8b0b1feba89d:0x6f68c5202f62f23f!9m1!1b1';
+
+const REVIEWS = [
+  { text: 'Na firmu Šedivák jsem dostal dobrá doporučení od známého, kterému FVE také montovali. Technik mi vše vysvětlil, přijeli montovat dokonce i na zasněženou střechu, vše zařídili, výborná komunikace.', author: 'Dušan Šmídl' },
+  { text: 'S firmou naprostá spokojenost. Rychlá a kvalitní instalace, vstřícné jednání jak po telefonu tak s pracovníky na místě. Mohu jen doporučit.', author: 'Adam Stika' },
+  { text: 'S firmou Šedivák jsem byla moc spokojená, skvělá komunikace, montáž proběhla v naprostém pořádku i následné zapojení elektrikářem. Skvělý profesionální přístup všech zúčastněných. Mohu jen doporučit.', author: 'Eva Tichá' },
+  { text: 'Byl jsem moc spokojený s individuálním přístupem k mé střeše ve tvaru oktagonu. Jak pan Šedivý, tak celý jeho tým se postarali o zdárnou realizaci a my již více jak rok šetříme a využíváme přes baterku i večer sluneční energii. Děkuju za dobře odvedenou práci!', author: 'Jan Mertl' },
+  { text: 'Naprosto perfektní firma, zejména bych vyzdvihnul velmi osobní přístup, jak před, tak po realizaci, který se dneska moc nevidí. Vše pracuje jak má a kýžený výsledek naplnil mé očekávání. Za mě mohu naprosto s čistým svědomím doporučit.', author: 'Martin Šlechta' },
+  { text: 'Montáž proběhla bez problému. Kompletně připraveno za jeden den, včetně základního seznámení se zařízením. Na firmu Šedivák jsem dostal doporučení a sám budu doporučovat dále. Díky.', author: 'Tomáš Bittner' },
+];
+const stars = [1, 2, 3, 4, 5];
+---
+<section id="reference" class="py-[var(--section-y)] overflow-hidden">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="mb-8 md:mb-10 flex flex-col lg:flex-row lg:items-end justify-between gap-4">
+      <div>
+        <p class="eyebrow mb-2">Reference</p>
+        <h2 class="h2 text-stone-950">Co říkají klienti</h2>
+        <p class="font-body text-stone-500 text-sm mt-3 measure">
+          Hodnocení z Google patří sesterské firmě Šedivák Elektro, se kterou
+          sdílíme lidi i přístup k práci. Šedivák Stavby vznikly v roce 2025
+          a vlastní recenze teprve sbírají.
+        </p>
+      </div>
+      <div class="flex items-center gap-1 flex-shrink-0" role="img" aria-label="Šedivák Elektro i Stavby – průměr 5 z 5 na Google">
+        {stars.map(() => <Icon name="star" fill="currentColor" class="w-4 h-4 text-brand-700" />)}
+        <span class="ml-3 font-display text-stone-500 text-sm uppercase tracking-widest">5 / 5 · Šedivák Elektro i Stavby</span>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-2 md:gap-4" id="rv">
+      <button data-rv="prev" aria-label="Předchozí" class="hidden md:flex flex-shrink-0 w-10 h-10 md:w-12 md:h-12 border-2 border-stone-300 hover:border-brand-500 text-stone-400 hover:text-brand-700 items-center justify-center transition-colors duration-200">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6" /></svg>
+      </button>
+
+      <div class="flex-1 overflow-hidden touch-pan-y" id="rv-viewport">
+        <div class="flex transition-transform duration-500 ease-in-out" id="rv-track">
+          {REVIEWS.map((r) => (
+            <div class="rv-slide flex-shrink-0 px-2 md:px-3">
+              <div class="card-surface--flat border border-stone-200 p-5 md:p-8 h-full flex flex-col justify-between">
+                <div class="flex gap-0.5 mb-4 md:mb-6" role="img" aria-label="Hodnocení 5 z 5">
+                  {stars.map(() => <Icon name="star" fill="currentColor" class="w-4 h-4 text-brand-700" />)}
+                </div>
+                <p class="font-body text-stone-700 text-sm md:text-base leading-relaxed flex-1 mb-5 md:mb-8">„{r.text}"</p>
+                <div class="flex items-center gap-3 pt-4 md:pt-6 border-t border-stone-200">
+                  <div class="w-8 h-8 md:w-9 md:h-9 bg-stone-200 flex items-center justify-center flex-shrink-0">
+                    <span class="font-display text-stone-700 text-xs font-bold">{r.author.charAt(0)}</span>
+                  </div>
+                  <div>
+                    <div class="font-display text-stone-950 text-sm font-semibold uppercase">{r.author}</div>
+                    <div class="font-body text-stone-500 text-xs">Google · Šedivák Elektro</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <button data-rv="next" aria-label="Další" class="hidden md:flex flex-shrink-0 w-10 h-10 md:w-12 md:h-12 border-2 border-stone-300 hover:border-brand-500 text-stone-400 hover:text-brand-700 items-center justify-center transition-colors duration-200">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6" /></svg>
+      </button>
+    </div>
+
+    <div class="flex justify-center items-center mt-4" id="rv-dots"></div>
+
+    <div class="text-center mt-6">
+      <a href={GOOGLE_REVIEWS_URL} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-stone-500 hover:text-brand-700 font-body text-sm transition-colors">
+        <svg width="16" height="16" viewBox="0 0 48 48" aria-hidden="true">
+          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
+          <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
+          <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
+          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
+        </svg>
+        Zobrazit všechny recenze na Googlu
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .rv-slide { width: 100%; }
+  @media (min-width: 768px) { .rv-slide { width: 33.3333%; } }
+</style>
+
+<script>
+  const INTERVAL = 4500;
+  const track = document.getElementById('rv-track');
+  const viewport = document.getElementById('rv-viewport');
+  const dotsEl = document.getElementById('rv-dots');
+  const count = track.children.length;
+  let index = 0;
+  let perPage = 3;
+  let timer;
+
+  const maxIndex = () => Math.max(0, count - perPage);
+
+  const render = () => {
+    track.style.transform = `translateX(-${index * (100 / perPage)}%)`;
+    [...dotsEl.children].forEach((d, i) => {
+      const on = i === index;
+      on ? d.setAttribute('aria-current', 'true') : d.removeAttribute('aria-current');
+      const bar = d.firstElementChild;
+      bar.classList.toggle('w-8', on);
+      bar.classList.toggle('bg-brand-500', on);
+      bar.classList.toggle('w-2', !on);
+      bar.classList.toggle('bg-stone-300', !on);
+      bar.classList.toggle('group-hover/dot:bg-stone-400', !on);
+    });
+  };
+
+  const buildDots = () => {
+    dotsEl.innerHTML = '';
+    for (let i = 0; i <= maxIndex(); i++) {
+      const b = document.createElement('button');
+      b.className = 'h-11 px-2.5 flex items-center group/dot';
+      b.setAttribute('aria-label', `Přejít na ${i + 1}. stránku referencí`);
+      b.innerHTML = '<span class="block h-1.5 rounded-full transition-all duration-300"></span>';
+      b.addEventListener('click', () => goTo(i));
+      dotsEl.append(b);
+    }
+  };
+
+  const advance = () => { index = index >= maxIndex() ? 0 : index + 1; render(); };
+  const restart = () => { clearInterval(timer); timer = setInterval(advance, INTERVAL); };
+  const goTo = (i) => { index = i; render(); restart(); };
+  const prev = () => goTo(index <= 0 ? maxIndex() : index - 1);
+  const next = () => goTo(index >= maxIndex() ? 0 : index + 1);
+
+  const update = () => {
+    const pp = innerWidth >= 768 ? 3 : 1;
+    if (pp !== perPage || !dotsEl.children.length) {
+      perPage = pp;
+      index = Math.min(index, maxIndex());
+      buildDots();
+    }
+    render();
+  };
+
+  document.querySelector('[data-rv="prev"]').addEventListener('click', prev);
+  document.querySelector('[data-rv="next"]').addEventListener('click', next);
+
+  // Swipe na mobilu – vodorovný tah musí převážit nad svislým
+  let touch = null;
+  viewport.addEventListener('touchstart', (e) => {
+    const t = e.touches[0];
+    touch = { x: t.clientX, y: t.clientY };
+  }, { passive: true });
+  viewport.addEventListener('touchend', (e) => {
+    if (!touch) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - touch.x;
+    const dy = t.clientY - touch.y;
+    touch = null;
+    if (Math.abs(dx) < 45 || Math.abs(dx) < Math.abs(dy)) return;
+    dx < 0 ? next() : prev();
+  });
+
+  update();
+  addEventListener('resize', update);
+  restart();
+</script>

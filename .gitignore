@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.astro/
+.vercel
+.env*
+podklady/
+public/odeslat-klic.php
+_originaly-fotek/
+.playwright-mcp/

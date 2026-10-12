@@ -1,0 +1,54 @@
+---
+import Base from '../layouts/Base.astro';
+import Lightbox from '../components/Lightbox.astro';
+import { PHOTOS, photo } from '../data/site.js';
+
+// Horní řady se načítají hned, zbytek líně
+const EAGER = 6;
+const full = PHOTOS.map((n) => photo(n).full);
+---
+<Base
+  title="Fotogalerie realizací | Šedivák Stavby"
+  description="Fotogalerie staveb: rekonstrukce domů a bytů, zemní práce, základy, přípojky a zpevněné plochy v Plzeňském kraji. 90 fotografií z reálných zakázek."
+  path="/fotografie"
+>
+  <main id="obsah" class="min-h-screen pt-24 pb-[var(--section-y)]">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="mb-8 md:mb-10">
+        <a href="/" class="text-stone-500 hover:text-brand-700 font-body text-sm uppercase tracking-wider mb-6 inline-flex items-center gap-2 transition-colors">← Zpět na hlavní stránku</a>
+        <p class="eyebrow mb-2">Fotografie</p>
+        <h1 class="h1 text-stone-900">Naše práce<br />v obrazech</h1>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="foto-grid" data-photos={JSON.stringify(full)}>
+        {PHOTOS.map((n, i) => (
+          <button data-index={i} class="elevate aspect-[4/3] bg-stone-200 overflow-hidden group relative cursor-pointer" aria-label={`Zvětšit fotografii ${i + 1}`}>
+            <img
+              src={photo(n).src}
+              srcset={photo(n).srcset}
+              sizes="(min-width: 1024px) 280px, (min-width: 768px) 33vw, 45vw"
+              alt={`Realizace Šedivák Stavby ${i + 1}`}
+              width="400"
+              height="300"
+              loading={i < EAGER ? 'eager' : 'lazy'}
+              decoding="async"
+              fetchpriority={i < 4 ? 'high' : undefined}
+              class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+            <div class="absolute inset-0 bg-stone-950/0 group-hover:bg-stone-950/25 transition-colors duration-300"></div>
+          </button>
+        ))}
+      </div>
+    </div>
+  </main>
+  <Lightbox />
+</Base>
+
+<script>
+  const grid = document.getElementById('foto-grid');
+  const photos = JSON.parse(grid.dataset.photos);
+  grid.addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-index]');
+    if (btn) window.openLightbox?.(photos, Number(btn.dataset.index));
+  });
+</script>

@@ -1,0 +1,100 @@
+---
+import '../styles/global.css';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import FloatingCta from '../components/FloatingCta.astro';
+import { SITE_URL } from '../data/site.js';
+
+const { title, description, path = '/', noindex = false, home = false } = Astro.props;
+const url = `${SITE_URL}${path}`;
+// Náhled na Vercelu se nesmí dostat do Googlu
+const preview = !!process.env.VERCEL;
+const robots = noindex || preview ? 'noindex, follow' : 'index, follow';
+
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'GeneralContractor',
+  '@id': `${SITE_URL}/#firma`,
+  name: 'Šedivák Stavby',
+  legalName: 'Šedivák stavby s.r.o.',
+  url: `${SITE_URL}/`,
+  image: `${SITE_URL}/og-image.jpg`,
+  logo: `${SITE_URL}/images/logo-zlate-800.webp`,
+  description: 'Stavební a zednické práce v Plzeňském kraji – rekonstrukce, hrubé stavby, fasády a zateplení, zemní práce pro fotovoltaiku.',
+  vatID: 'CZ22407570',
+  taxID: '22407570',
+  telephone: '+420731115020',
+  email: 'info@sedivakstavby.cz',
+  foundingDate: '2018',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'Dolní náměstí 46',
+    addressLocality: 'Město Touškov',
+    postalCode: '33033',
+    addressRegion: 'Plzeňský kraj',
+    addressCountry: 'CZ',
+  },
+  areaServed: { '@type': 'AdministrativeArea', name: 'Plzeňský kraj' },
+  openingHoursSpecification: [{
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+    opens: '07:00',
+    closes: '17:00',
+  }],
+  sameAs: ['https://www.facebook.com/profile.php?id=61566394221859'],
+};
+---
+<!doctype html>
+<html lang="cs">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content={robots} />
+    {!noindex && <link rel="canonical" href={url} />}
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Šedivák Stavby s.r.o." />
+    <meta property="og:locale" content="cs_CZ" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={url} />
+    <meta property="og:image" content={`${SITE_URL}/og-image.jpg`} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Pokládka střešní krytiny na realizaci Šedivák Stavby" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={`${SITE_URL}/og-image.jpg`} />
+
+    {home && <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />}
+
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <slot name="head" />
+
+    <!-- Směr přechodu: na galerii vpřed, zpátky na úvod obráceně -->
+    <script is:inline>
+      addEventListener('pagereveal', (e) => {
+        if (!e.viewTransition || !window.navigation?.activation?.from) return;
+        const rank = (u) => (new URL(u).pathname.startsWith('/fotografie') ? 1 : 0);
+        const from = rank(navigation.activation.from.url);
+        const to = rank(location.href);
+        document.documentElement.dataset.vtDir = to < from ? 'back' : 'forward';
+      });
+    </script>
+  </head>
+  <body class="antialiased">
+    <div class="grid-paper" aria-hidden="true"></div>
+    <Navbar home={home} path={path} />
+    <slot />
+    <Footer />
+    <FloatingCta home={home} />
+  </body>
+</html>

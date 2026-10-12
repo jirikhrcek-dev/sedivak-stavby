@@ -1,0 +1,43 @@
+---
+import { ELEKTRO_URL } from '../data/site.js';
+---
+<section class="py-[var(--section-y)]">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="mb-8 md:mb-10">
+      <p class="eyebrow mb-2">Skupina Šedivák</p>
+      <h2 class="h2 text-stone-950">Stavby i elektro<br />pod jednou střechou</h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="card-surface border-2 border-brand-500 p-8 flex flex-col justify-between">
+        <div>
+          <div class="w-10 h-1 bg-brand-500 mb-6"></div>
+          <p class="eyebrow mb-2">Stavební práce</p>
+          <h3 class="h3 text-stone-950 mb-4">Šedivák Stavby</h3>
+          <p class="font-body text-stone-600 text-sm leading-relaxed">
+            Zednické práce, rekonstrukce, hrubé stavby, fasády a vše okolo stavebnictví
+            v Plzeňském kraji.
+          </p>
+        </div>
+        <div class="mt-8">
+          <span class="inline-block border border-stone-400 text-stone-500 font-display uppercase text-xs tracking-widest px-5 py-2.5">Právě zde</span>
+        </div>
+      </div>
+
+      <a href={ELEKTRO_URL} target="_blank" rel="noreferrer" class="card-surface card-zoom border border-stone-300 hover:border-brand-500 p-8 flex flex-col justify-between group transition-colors duration-300">
+        <div>
+          <div class="w-10 h-1 bg-stone-300 group-hover:bg-brand-500 transition-colors duration-300 mb-6"></div>
+          <p class="text-stone-500 group-hover:text-brand-700 font-display uppercase tracking-widest text-xs mb-2 transition-colors duration-300">Elektroinstalace</p>
+          <h3 class="h3 text-stone-950 mb-4">Šedivák Elektro</h3>
+          <p class="font-body text-stone-600 text-sm leading-relaxed">
+            Elektroinstalace, revize, fotovoltaické elektrárny a vše z oblasti elektro
+            pro domy i firmy.
+          </p>
+        </div>
+        <div class="mt-8 flex items-center gap-3">
+          <span class="inline-block bg-brand-500 group-hover:bg-brand-400 text-stone-950 font-display uppercase text-xs tracking-widest px-5 py-2.5 transition-colors duration-200">Přejít na web →</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>

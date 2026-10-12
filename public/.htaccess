@@ -1,0 +1,67 @@
+# Šedivák Stavby – konfigurace Apache pro Wedos
+# (na Vercelu to samé dělá vercel.json, tady se ten nepoužije)
+
+Options -Indexes
+DirectoryIndex index.html
+AddDefaultCharset utf-8
+ErrorDocument 404 /404.html
+
+<IfModule mod_mime.c>
+  AddType font/woff2 .woff2
+  AddType image/svg+xml .svg
+  AddType image/webp .webp
+ </IfModule>
+
+# ---------------------------------------------------------------------------
+# Přesměrování
+# ---------------------------------------------------------------------------
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # HTTPS (Wedos může HTTPS ukončovat na proxy, proto i X-Forwarded-Proto)
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+  RewriteRule ^ https://www.sedivakstavby.cz%{REQUEST_URI} [R=301,L,NE]
+
+  # Varianta bez www -> www
+  RewriteCond %{HTTP_HOST} ^sedivakstavby\.cz$ [NC]
+  RewriteRule ^ https://www.sedivakstavby.cz%{REQUEST_URI} [R=301,L,NE]
+
+  # Skryté (tečkové) soubory a složky kromě .well-known
+  RewriteRule (^|/)\.(?!well-known(/|$)) - [F,L]
+
+  # Adresa bez .html (Astro staví fotografie.html)
+  RewriteRule ^fotografie/?$ /fotografie.html [L]
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# Zákaz přístupu k citlivým souborům
+# ---------------------------------------------------------------------------
+<FilesMatch "(?i)^(odeslat-klic\.php|\.env.*|\.git.*|package(-lock)?\.json|readme(\..*)?|composer\.(json|lock)|.*\.(md|log|lock|ini|sh|bak|sql|map))$">
+  Require all denied
+</FilesMatch>
+
+# ---------------------------------------------------------------------------
+# Bezpečnostní hlavičky a cache
+# ---------------------------------------------------------------------------
+<IfModule mod_headers.c>
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always unset X-Powered-By
+
+  # Hashované soubory z buildu (Astro je dává do /_astro/) se nikdy nemění -> rok
+  Header set Cache-Control "public, max-age=31536000, immutable" "expr=%{REQUEST_URI} =~ m#^/_astro/#"
+  # HTML vždy ověřit u serveru, ať se nová verze projeví hned
+  Header set Cache-Control "no-cache" "expr=%{REQUEST_URI} =~ m#(/|\.html|/fotografie/?)$#"
+  # Fotky, video, fonty, ikony -> týden
+  Header set Cache-Control "public, max-age=604800" "expr=%{REQUEST_URI} =~ m#\.(png|jpe?g|webp|svg|mp4|woff2)$# && %{REQUEST_URI} !~ m#^/_astro/#"
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# Komprese
+# ---------------------------------------------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml text/javascript application/javascript application/json application/ld+json application/xml image/svg+xml
+</IfModule>

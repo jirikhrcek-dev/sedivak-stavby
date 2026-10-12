@@ -1,0 +1,37 @@
+---
+import { PREVIEW, photo } from '../data/site.js';
+---
+<section id="fotografie" class="py-[var(--section-y)]">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="mb-8 md:mb-10">
+      <p class="eyebrow mb-2">Fotografie</p>
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <h2 class="h2 text-stone-900">Naše práce<br />v obrazech</h2>
+        <a href="/fotografie" class="btn btn-sm btn-outline hidden sm:inline-flex text-stone-600 self-end">Zobrazit vše →</a>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 mb-8">
+      {PREVIEW.map((n, i) => (
+        <a href="/fotografie" tabindex="-1" class="elevate aspect-[4/3] bg-stone-200 cursor-pointer group relative overflow-hidden">
+          <img
+            src={photo(n).src}
+            srcset={photo(n).srcset}
+            sizes="(min-width: 768px) 340px, 45vw"
+            alt={`Realizace Šedivák Stavby ${i + 1}`}
+            width="400"
+            height="300"
+            loading="lazy"
+            decoding="async"
+            class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+          <div class="absolute inset-0 bg-stone-950/0 group-hover:bg-stone-950/30 transition-colors duration-300"></div>
+        </a>
+      ))}
+    </div>
+
+    <div class="flex justify-center">
+      <a href="/fotografie" class="btn btn-primary">Zobrazit všechny fotografie →</a>
+    </div>
+  </div>
+</section>

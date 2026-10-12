@@ -1,0 +1,176 @@
+---
+import { ELEKTRO_URL } from '../data/site.js';
+const { home = false, path = '/' } = Astro.props;
+
+// Na podstránkách vedou kotvy na úvod
+const a = (id) => (home ? `#${id}` : `/#${id}`);
+const NAV_LINKS = [
+  { label: 'Domů', href: a('home'), section: 'home' },
+  { label: 'Služby', href: a('sluzby'), section: 'sluzby' },
+  { label: 'Projekty', href: a('projekty'), section: 'projekty' },
+  { label: 'O nás', href: a('o-nas'), section: 'o-nas' },
+  { label: 'Fotografie', href: '/fotografie', section: 'fotografie' },
+  { label: 'Reference', href: a('reference'), section: 'reference' },
+  { label: 'Kontakt', href: a('kontakt'), section: 'kontakt' },
+];
+const pageActive = path === '/fotografie' ? 'fotografie' : null;
+---
+<header
+  id="site-header"
+  data-home={home ? '1' : undefined}
+  class:list={['vt-header fixed top-0 left-0 right-0 z-50 transition-all duration-300', home ? 'bg-transparent' : 'bg-stone-950 shadow-lg']}
+>
+  <a href="#obsah" class="skip-link">Přeskočit na obsah</a>
+
+  <div class="max-w-6xl mx-auto px-6 flex items-center justify-between h-16">
+    <a href={a('home')} class="flex items-center shrink-0" aria-label="Šedivák Stavby – domů">
+      <img src="/images/logo-zlate-200.webp" alt="Šedivák Stavby s.r.o" width="200" height="103" class="h-10 md:h-11 w-auto" />
+    </a>
+
+    <nav class="hidden md:flex items-center gap-8 relative" id="nav-desktop">
+      {NAV_LINKS.map((link) => (
+        <a
+          href={link.href}
+          data-section={link.section}
+          aria-current={pageActive === link.section ? 'true' : undefined}
+          class:list={['nav-link text-sm font-body transition-colors duration-200', pageActive === link.section ? 'text-white' : 'text-stone-300 hover:text-brand-400']}
+        >{link.label}</a>
+      ))}
+      <span id="nav-bar" aria-hidden="true" class="pointer-events-none absolute -bottom-2 left-0 h-0.5 w-px bg-brand-500 origin-left" style="transform: scaleX(0)"></span>
+    </nav>
+
+    <div class="hidden md:flex items-stretch gap-3">
+      <a href={ELEKTRO_URL} target="_blank" rel="noreferrer" title="Šedivák Elektro – přejít na web" aria-label="Šedivák Elektro – přejít na web (otevře se v novém okně)" class="group flex">
+        <span class="flex items-center px-3 py-1.5 border border-stone-500/60 group-hover:border-brand-500 transition-colors duration-200">
+          <img src="/images/sedivak-elektro-logo-svetle.png" alt="Šedivák Elektro" width="268" height="136" class="h-6 w-auto opacity-90 group-hover:opacity-100 transition-opacity duration-200" />
+        </span>
+      </a>
+      <a href={a('kontakt')} class="btn btn-sm btn-primary">Poptávka zdarma</a>
+    </div>
+
+    <div class="md:hidden flex items-center">
+      <button
+        id="menu-btn"
+        class="group text-white p-2 min-w-[44px] min-h-[44px] flex flex-col justify-center items-center"
+        aria-label="Otevřít menu"
+        aria-expanded="false"
+        aria-controls="mobilni-menu"
+      >
+        <div class="w-6 h-0.5 bg-white mb-1.5 transition-all group-aria-expanded:rotate-45 group-aria-expanded:translate-y-2"></div>
+        <div class="w-6 h-0.5 bg-white mb-1.5 transition-all group-aria-expanded:opacity-0"></div>
+        <div class="w-6 h-0.5 bg-white transition-all group-aria-expanded:-rotate-45 group-aria-expanded:-translate-y-2"></div>
+      </button>
+    </div>
+  </div>
+
+  <div id="mobilni-menu" hidden class="md:hidden bg-stone-950 border-t border-stone-800 px-6 py-4 flex-col gap-1 max-h-[calc(100vh-4rem)] overflow-y-auto [&:not([hidden])]:flex">
+    {NAV_LINKS.map((link) => (
+      <a
+        href={link.href}
+        data-section={link.section}
+        aria-current={pageActive === link.section ? 'true' : undefined}
+        class:list={['nav-link-m text-base font-body transition-colors flex items-center min-h-[44px] border-l-2 pl-3', pageActive === link.section ? 'border-brand-500 text-white' : 'border-transparent text-stone-300 hover:text-brand-400']}
+      >{link.label}</a>
+    ))}
+    <a href={ELEKTRO_URL} target="_blank" rel="noreferrer" aria-label="Šedivák Elektro – přejít na web (otevře se v novém okně)" class="group flex items-center gap-3 pt-4 mt-1 border-t border-stone-800">
+      <span class="flex items-center px-3 py-1.5 border border-stone-500/60 group-hover:border-brand-500 transition-colors duration-200">
+        <img src="/images/sedivak-elektro-logo-svetle.png" alt="Šedivák Elektro" width="268" height="136" loading="lazy" class="h-6 w-auto opacity-90 group-hover:opacity-100 transition-opacity duration-200" />
+      </span>
+      <span class="text-stone-400 group-hover:text-brand-400 font-body text-sm transition-colors">Sesterská firma →</span>
+    </a>
+    <a href={a('kontakt')} class="btn btn-sm btn-primary w-full mt-2">Poptávka zdarma</a>
+  </div>
+</header>
+
+<script>
+  const header = document.getElementById('site-header');
+  const home = header.dataset.home === '1';
+  const btn = document.getElementById('menu-btn');
+  const menu = document.getElementById('mobilni-menu');
+  const bar = document.getElementById('nav-bar');
+
+  // Lišta: na úvodu průhledná, po odrolování tmavá
+  if (home) {
+    const onScroll = () => {
+      const on = window.scrollY > 40;
+      header.classList.toggle('bg-stone-950', on);
+      header.classList.toggle('shadow-lg', on);
+      header.classList.toggle('bg-transparent', !on);
+    };
+    onScroll();
+    addEventListener('scroll', onScroll, { passive: true });
+  }
+
+  // Mobilní menu – zamkne scroll pozadí
+  const setMenu = (open) => {
+    menu.hidden = !open;
+    btn.setAttribute('aria-expanded', String(open));
+    btn.setAttribute('aria-label', open ? 'Zavřít menu' : 'Otevřít menu');
+    document.body.style.overflow = open ? 'hidden' : '';
+  };
+  btn.addEventListener('click', () => setMenu(menu.hidden));
+  menu.addEventListener('click', (e) => { if (e.target.closest('a')) setMenu(false); });
+
+  // Čára pod aktivní položkou – skočí s nulovou šířkou a pak se roztáhne
+  const links = [...document.querySelectorAll('.nav-link')];
+  const mLinks = [...document.querySelectorAll('.nav-link-m')];
+  let active = null;
+  const drawBar = (draw) => {
+    const el = links.find((l) => l.dataset.section === active);
+    if (!el) { bar.style.transform = 'scaleX(0)'; return; }
+    const pos = `translateX(${el.offsetLeft}px)`;
+    if (!draw) {
+      bar.style.transition = 'none';
+      bar.style.transform = `${pos} scaleX(${el.offsetWidth})`;
+      return;
+    }
+    bar.style.transition = 'none';
+    bar.style.transform = `${pos} scaleX(0)`;
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      bar.style.transition = 'transform 0.45s cubic-bezier(0.22, 1, 0.36, 1)';
+      bar.style.transform = `${pos} scaleX(${el.offsetWidth})`;
+    }));
+  };
+  const setActive = (id) => {
+    if (id === active) return;
+    active = id;
+    for (const l of links) {
+      const on = l.dataset.section === id;
+      l.classList.toggle('text-white', on);
+      l.classList.toggle('text-stone-300', !on);
+      l.classList.toggle('hover:text-brand-400', !on);
+      on ? l.setAttribute('aria-current', 'true') : l.removeAttribute('aria-current');
+    }
+    for (const l of mLinks) {
+      const on = l.dataset.section === id;
+      l.classList.toggle('border-brand-500', on);
+      l.classList.toggle('text-white', on);
+      l.classList.toggle('border-transparent', !on);
+      l.classList.toggle('text-stone-300', !on);
+      on ? l.setAttribute('aria-current', 'true') : l.removeAttribute('aria-current');
+    }
+    drawBar(true);
+  };
+
+  if (home) {
+    // Poslední sekce, jejíž začátek už vyjel nad spodní hranu lišty
+    const ids = links.map((l) => l.dataset.section);
+    const onScroll = () => {
+      const line = window.scrollY + 88;
+      let current = ids[0];
+      for (const id of ids) {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top + window.scrollY <= line) current = id;
+      }
+      if (innerHeight + scrollY >= document.documentElement.scrollHeight - 4) current = ids[ids.length - 1];
+      setActive(current);
+    };
+    onScroll();
+    addEventListener('scroll', onScroll, { passive: true });
+  } else {
+    active = links.find((l) => l.getAttribute('aria-current'))?.dataset.section ?? null;
+    drawBar(false);
+  }
+  addEventListener('resize', () => drawBar(false));
+  document.fonts?.ready.then(() => drawBar(false));
+</script>

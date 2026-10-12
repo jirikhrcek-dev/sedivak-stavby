@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Services from '../components/Services.astro';
+import Projects from '../components/Projects.astro';
+import About from '../components/About.astro';
+import Gallery from '../components/Gallery.astro';
+import Reviews from '../components/Reviews.astro';
+import SedivakaGroup from '../components/SedivakaGroup.astro';
+import Contact from '../components/Contact.astro';
+import Lightbox from '../components/Lightbox.astro';
+---
+<Base
+  home
+  title="Šedivák Stavby | Stavební firma Plzeňský kraj"
+  description="Stavební a zednické práce v Plzeňském kraji. Rekonstrukce domů a bytů, hrubé stavby, fasády, zateplení a zemní práce. Nezávazná poptávka, odpověď do 24 hodin."
+  path="/"
+>
+  <link slot="head" rel="preload" as="image" href="/images/gallery/r/foto-05-800.webp" imagesrcset="/images/gallery/r/foto-05-800.webp 800w, /images/gallery/r/foto-05-1600.webp 1600w" imagesizes="100vw" fetchpriority="high" />
+  <main id="obsah">
+    <Hero />
+    <Services />
+    <Projects />
+    <About />
+    <Gallery />
+    <Reviews />
+    <SedivakaGroup />
+    <Contact />
+  </main>
+  <Lightbox />
+</Base>

@@ -1,0 +1,49 @@
+---
+import Icon from './Icon.astro';
+
+const SERVICES = [
+  { title: 'Rekonstrukce', desc: 'Kompletní rekonstrukce domů, bytů, koupelen a kuchyní. Vše od A do Z.', icon: 'hammer' },
+  { title: 'Hrubé stavby', desc: 'Výstavba nových objektů od základové desky po střechu včetně statiky.', icon: 'building' },
+  { title: 'Zednické práce', desc: 'Zdění, omítky, obklady, dlažby a veškeré dokončovací práce.', icon: 'brick' },
+  { title: 'Fasády a zateplení', desc: 'Renovace fasád, zateplování ETICS, venkovní povrchové úpravy.', icon: 'roller' },
+  { title: 'Fotovoltaika – zemní práce', desc: 'Příprava konstrukcí, vrtání a betonování nosných sloupků FVE.', icon: 'sun' },
+  { title: 'Projektové řízení', desc: 'Poradenství, plánování a koordinace celé stavby na klíč.', icon: 'clipboard' },
+];
+---
+<section id="sluzby" class="py-[var(--section-y)]">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 md:mb-10 gap-4">
+      <div>
+        <p class="eyebrow mb-2">Co děláme</p>
+        <h2 class="h2 text-stone-950">Naše služby</h2>
+      </div>
+      <p class="text-stone-500 font-body text-sm max-w-xs sm:text-right leading-relaxed">
+        Každý projekt přizpůsobujeme přesně potřebám klienta.
+      </p>
+    </div>
+
+    <div class="svc-grid card-surface grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 border-l border-t border-stone-300">
+      {SERVICES.map((s) => (
+        <div class="service-card svc border-r border-b border-stone-300 p-6 md:p-8">
+          <div class="w-10 h-10 bg-brand-500 mb-5 flex items-center justify-center">
+            <Icon name={s.icon} class="w-5 h-5 text-white" />
+          </div>
+          <h3 class="h3 text-stone-950 mb-3">{s.title}</h3>
+          <p class="font-body text-stone-500 text-sm leading-relaxed">{s.desc}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Karta pod myší vystoupí, ostatní ztlumí */
+  .svc {
+    position: relative;
+    transition: transform 0.4s ease, opacity 0.3s ease, box-shadow 0.4s ease;
+  }
+  @media (hover: hover) {
+    .svc:hover { transform: scale(1.015); box-shadow: var(--shadow-raised); z-index: 1; }
+    .svc-grid:hover .svc:not(:hover) { opacity: 0.45; }
+  }
+</style>

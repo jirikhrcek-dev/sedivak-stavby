@@ -1,0 +1,262 @@
+---
+import { contact, ELEKTRO_URL, FACEBOOK_URL } from '../data/site.js';
+
+const COUNTRIES = [
+  { code: '+420', flag: '🇨🇿', label: 'CZ', digits: 9 },
+  { code: '+421', flag: '🇸🇰', label: 'SK', digits: 9 },
+  { code: '+49', flag: '🇩🇪', label: 'DE', digits: 10 },
+];
+
+// Rohové razítko výkresu
+const TITLE_BLOCK = [
+  { label: 'Zhotovitel', value: 'Šedivák stavby s.r.o.' },
+  { label: 'Telefon', value: contact.phone, href: contact.phoneHref },
+  { label: 'E-mail', value: contact.email, href: `mailto:${contact.email}` },
+  { label: 'Adresa', value: contact.address },
+  { label: 'Pracovní doba', value: contact.hours },
+  { label: 'Fakturace', value: contact.invoiceEmail, href: `mailto:${contact.invoiceEmail}` },
+];
+---
+<section id="kontakt" class="py-[var(--section-y)]">
+  <div class="max-w-4xl mx-auto px-6 md:px-12">
+    <div class="mb-12">
+      <p class="eyebrow mb-2">Kontakt</p>
+      <h2 class="h2" style="color: var(--text)">Nezávazná poptávka</h2>
+      <p class="lead mt-4" style="color: var(--text-muted)">
+        Popište, co potřebujete postavit nebo zrekonstruovat. Ozveme se do 24 hodin
+        s návrhem dalšího postupu.
+      </p>
+    </div>
+
+    <div class="sheet">
+      <div class="sheet-head">
+        <span style="color: var(--accent-text)">Poptávkový list</span>
+        <span style="color: var(--text-muted)">Odpověď do 24 hodin</span>
+      </div>
+
+      <div class="p-6 md:p-10">
+        <div id="form-sent" hidden class="py-6 text-center">
+          <div class="stamp mb-8">Odesláno</div>
+          <h3 class="h3 mb-2" style="color: var(--text)">Poptávka dorazila</h3>
+          <p class="font-body text-sm measure mx-auto" style="color: var(--text-muted)">
+            Ozveme se do 24 hodin na uvedený kontakt. Pokud to spěchá, volejte
+            rovnou na <a href={contact.phoneHref} class="underline" style="color: var(--accent-text)">{contact.phone}</a>.
+          </p>
+        </div>
+
+        <form id="poptavka" class="flex flex-col gap-5">
+          <!-- Past na roboty – člověk pole nevidí -->
+          <input type="text" name="web" tabindex="-1" autocomplete="off" aria-hidden="true" class="hidden" />
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label for="jmeno" class="field-label">Jméno *</label>
+              <input id="jmeno" type="text" name="jmeno" autocomplete="given-name" required class="field" placeholder="Jan" />
+            </div>
+            <div>
+              <label for="prijmeni" class="field-label">Příjmení *</label>
+              <input id="prijmeni" type="text" name="prijmeni" autocomplete="family-name" required class="field" placeholder="Novák" />
+            </div>
+          </div>
+
+          <div>
+            <label for="telefon" class="field-label">Telefon</label>
+            <div class="phone-row" id="phone-row">
+              <div class="relative flex-shrink-0" id="prefix">
+                <button
+                  type="button"
+                  id="prefix-btn"
+                  aria-label="Předvolba +420, změnit zemi"
+                  aria-expanded="false"
+                  class="flex items-center gap-2 h-full px-3 sm:px-4 py-3 border-r transition-colors duration-200"
+                  style="background-color: var(--surface-2); border-color: var(--border)"
+                >
+                  <span class="text-xl leading-none" id="prefix-flag">🇨🇿</span>
+                  <span class="font-body text-sm" style="color: var(--text)" id="prefix-code">+420</span>
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true" id="prefix-caret" class="transition-transform duration-200" style="color: var(--text-muted)">
+                    <path d="M1 3l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </button>
+                <div id="prefix-list" hidden class="absolute top-full left-0 z-20 mt-1 border shadow-xl min-w-[150px]" style="background-color: var(--surface); border-color: var(--border)">
+                  {COUNTRIES.map((c) => (
+                    <button type="button" data-code={c.code} data-flag={c.flag} data-digits={c.digits} class="prefix-opt w-full flex items-center gap-3 px-4 py-3 transition-colors duration-150 hover:brightness-95">
+                      <span class="text-xl leading-none">{c.flag}</span>
+                      <span class="font-body text-sm" style="color: var(--text)">{c.label}</span>
+                      <span class="font-body text-sm ml-auto" style="color: var(--text-muted)">{c.code}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <input id="telefon" type="tel" name="telefon" autocomplete="tel-national" aria-invalid="false" class="field field-flush flex-1" placeholder="9 číslic" />
+            </div>
+            <p id="phone-error" class="font-body text-xs mt-1.5 transition-opacity duration-200 opacity-0" style="color: #dc2626">
+              Zadejte <span class="digits">9</span> číslic bez předvolby.
+            </p>
+          </div>
+
+          <div>
+            <label for="email" class="field-label">E-mail *</label>
+            <input id="email" type="email" name="email" autocomplete="email" required class="field" placeholder="jan@example.cz" />
+          </div>
+
+          <div>
+            <label for="zprava" class="field-label">Popis projektu *</label>
+            <textarea id="zprava" name="zprava" required rows="5" class="field resize-none" placeholder="Co potřebujete, kde stavba stojí a v jakém rozsahu…"></textarea>
+          </div>
+
+          <label class="flex items-start gap-3 cursor-pointer py-1">
+            <input type="checkbox" name="souhlas" required class="mt-0.5 w-5 h-5 flex-shrink-0 accent-brand-700" />
+            <span class="font-body text-xs leading-relaxed" style="color: var(--text-muted)">
+              Souhlasím se zpracováním osobních údajů za účelem vyřízení poptávky.
+              <a href="/zasady-ochrany-osobnich-udaju.html" target="_blank" rel="noreferrer" class="underline" style="color: var(--accent-text)">Zásady ochrany osobních údajů</a>
+            </span>
+          </label>
+
+          <button type="submit" id="form-submit" class="btn btn-primary w-full min-h-[48px] disabled:opacity-60 disabled:cursor-not-allowed">
+            <span class="label-idle">Odeslat poptávku →</span>
+            <span class="label-busy hidden items-center gap-2">
+              <svg class="animate-spin" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-opacity="0.3" stroke-width="2" />
+                <path d="M14.5 8A6.5 6.5 0 0 0 8 1.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              </svg>
+              Odesílám
+            </span>
+          </button>
+
+          <p id="form-error" hidden class="font-body text-xs" style="color: #dc2626" role="alert">
+            Odeslání se nezdařilo. Zkuste to znovu, nebo zavolejte na {contact.phone}.
+          </p>
+
+          <p class="font-body text-xs" style="color: var(--text-muted)">Odpovídáme do 24 hodin, obvykle týž pracovní den.</p>
+        </form>
+      </div>
+
+      <div class="titleblock">
+        {TITLE_BLOCK.map((c) => (
+          <div class="titleblock-cell">
+            <div class="titleblock-label">{c.label}</div>
+            {c.href ? <a href={c.href} class="titleblock-value transition-colors">{c.value}</a> : <div class="titleblock-value">{c.value}</div>}
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div class="mt-8 grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-4 items-stretch">
+      <a href={ELEKTRO_URL} target="_blank" rel="noreferrer" class="card-surface card-zoom border p-6 flex items-center justify-between gap-4 group" style="border-color: var(--border)">
+        <div>
+          <p class="font-display uppercase tracking-[0.16em] text-xs mb-1" style="color: var(--text-muted)">Sesterská firma</p>
+          <p class="font-display text-xl font-bold uppercase" style="color: var(--text)">Šedivák Elektro</p>
+          <p class="font-body text-sm mt-1" style="color: var(--accent-text)">Elektroinstalace · Revize · Fotovoltaika</p>
+        </div>
+        <span class="text-3xl transition-transform duration-200 group-hover:translate-x-1" style="color: var(--accent-text)">→</span>
+      </a>
+      <a href={FACEBOOK_URL} target="_blank" rel="noreferrer" class="card-surface border p-6 flex items-center justify-center transition-colors" style="border-color: var(--border); color: var(--text-muted)">
+        <span class="font-display uppercase tracking-[0.16em] text-xs">Facebook</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<script>
+  // PŘEPÍNAČ ODESÍLÁNÍ: 'emailjs' = z prohlížeče přes EmailJS,
+  // 'resend' = přes public/odeslat.php na Wedosu (jen na ostrém webu)
+  const FORM_SERVICE = 'emailjs';
+  const EMAILJS_SERVICE_ID = 'service_33lq4tq';
+  const EMAILJS_TEMPLATE_ID = 'template_j0yo7x6';
+  const EMAILJS_PUBLIC_KEY = 'xv76ukTIAz4xwIRzi';
+
+  const form = document.getElementById('poptavka');
+  const phone = document.getElementById('telefon');
+  const phoneRow = document.getElementById('phone-row');
+  const phoneErr = document.getElementById('phone-error');
+  const prefixBox = document.getElementById('prefix');
+  const prefixBtn = document.getElementById('prefix-btn');
+  const prefixList = document.getElementById('prefix-list');
+  const submit = document.getElementById('form-submit');
+  const errorEl = document.getElementById('form-error');
+
+  let prefix = '+420';
+  let digits = 9;
+
+  const validPhone = () => {
+    const v = phone.value.replace(/\s/g, '');
+    if (!v) return true;
+    return /^\d+$/.test(v) && v.length === digits;
+  };
+  const showPhoneError = (on) => {
+    phoneRow.classList.toggle('phone-row--error', on);
+    phoneErr.classList.toggle('opacity-0', !on);
+    phoneErr.classList.toggle('opacity-100', on);
+    phone.setAttribute('aria-invalid', String(on));
+  };
+
+  const setList = (open) => {
+    prefixList.hidden = !open;
+    prefixBtn.setAttribute('aria-expanded', String(open));
+    document.getElementById('prefix-caret').classList.toggle('rotate-180', open);
+  };
+  const markCurrent = () => {
+    for (const o of prefixList.querySelectorAll('.prefix-opt')) {
+      o.style.backgroundColor = o.dataset.code === prefix ? 'var(--surface-2)' : 'transparent';
+    }
+  };
+  markCurrent();
+  prefixBtn.addEventListener('click', () => setList(prefixList.hidden));
+  document.addEventListener('mousedown', (e) => { if (!prefixBox.contains(e.target)) setList(false); });
+  for (const opt of prefixList.querySelectorAll('.prefix-opt')) {
+    opt.addEventListener('click', () => {
+      prefix = opt.dataset.code;
+      digits = Number(opt.dataset.digits);
+      document.getElementById('prefix-flag').textContent = opt.dataset.flag;
+      document.getElementById('prefix-code').textContent = prefix;
+      prefixBtn.setAttribute('aria-label', `Předvolba ${prefix}, změnit zemi`);
+      phone.placeholder = `${digits} číslic`;
+      phoneErr.querySelector('.digits').textContent = digits;
+      markCurrent();
+      showPhoneError(false);
+      setList(false);
+    });
+  }
+  phone.addEventListener('input', () => showPhoneError(phone.value.length > 0 && !validPhone()));
+
+  const setSending = (on) => {
+    submit.disabled = on;
+    submit.querySelector('.label-idle').classList.toggle('hidden', on);
+    const busy = submit.querySelector('.label-busy');
+    busy.classList.toggle('hidden', !on);
+    busy.classList.toggle('inline-flex', on);
+  };
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!validPhone()) { showPhoneError(true); phone.focus(); return; }
+    const data = new FormData(form);
+    const params = {
+      from_name: `${data.get('jmeno')} ${data.get('prijmeni')}`,
+      from_email: data.get('email'),
+      phone: data.get('telefon') ? `${prefix} ${data.get('telefon')}` : '',
+      message: data.get('zprava'),
+    };
+    setSending(true);
+    errorEl.hidden = true;
+    try {
+      if (FORM_SERVICE === 'resend') {
+        const r = await fetch('/odeslat.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...params, web: data.get('web') }),
+        });
+        if (!r.ok) throw new Error(String(r.status));
+      } else {
+        // Knihovna se stáhne až při odeslání
+        const emailjs = (await import('@emailjs/browser')).default;
+        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params, EMAILJS_PUBLIC_KEY);
+      }
+      form.remove();
+      document.getElementById('form-sent').hidden = false;
+    } catch {
+      errorEl.hidden = false;
+      setSending(false);
+    }
+  });
+</script>

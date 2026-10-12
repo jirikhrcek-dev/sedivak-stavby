@@ -1,0 +1,150 @@
+---
+import { PROJECTS } from '../data/projects.js';
+import { photo } from '../data/site.js';
+---
+<section id="projekty" class="py-[var(--section-y)]">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="flex items-end justify-between mb-8 md:mb-10">
+      <div>
+        <p class="eyebrow mb-2">Portfolio</p>
+        <h2 class="h2 text-stone-950">Vybrané projekty</h2>
+      </div>
+      <a href="#kontakt" class="btn btn-sm btn-outline hidden md:inline-flex text-stone-500">Mám zájem o realizaci →</a>
+    </div>
+
+    <div class="proj-list divide-y divide-stone-300">
+      {PROJECTS.map((p, i) => (
+        <div class="proj" data-photos={JSON.stringify(p.photos.map((n) => photo(n).full))} data-title={p.title}>
+          <button
+            type="button"
+            aria-expanded="false"
+            aria-controls={`projekt-${i}`}
+            class="proj-toggle group w-full text-left flex items-center gap-3 md:gap-6 py-5 md:py-6 cursor-pointer"
+          >
+            <span class="proj-num font-display text-2xl md:text-4xl font-bold w-8 md:w-16 flex-shrink-0 transition-colors duration-200 text-stone-500 group-hover:text-brand-700">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <img
+              src={photo(p.img).src}
+              srcset={photo(p.img).srcset}
+              sizes="80px"
+              alt=""
+              width="80"
+              height="56"
+              loading="lazy"
+              decoding="async"
+              class="proj-thumb hidden sm:block w-20 h-14 object-cover flex-shrink-0 transition-all duration-300"
+            />
+            <div class="flex-1 min-w-0">
+              <h3 class="proj-title h3 text-stone-950 group-hover:text-brand-700 transition-colors duration-200 text-balance">{p.title}</h3>
+              <p class="font-body text-stone-500 text-xs md:text-sm mt-0.5 hidden sm:block">{p.desc}</p>
+              <p class="font-body text-stone-500 text-xs mt-0.5 sm:hidden">{p.location} · {p.tag}</p>
+            </div>
+            <div class="hidden md:flex flex-col items-end gap-2 flex-shrink-0">
+              <span class="text-sm font-body text-stone-500">{p.location}</span>
+              <span class="text-xs font-display uppercase tracking-widest border border-brand-500 text-brand-700 px-4 py-1">{p.tag}</span>
+            </div>
+            <span class="proj-arrow font-display text-xl transition-all duration-300 flex-shrink-0 text-stone-400 group-hover:text-brand-700">→</span>
+          </button>
+
+          <div id={`projekt-${i}`} class="proj-panel grid transition-[grid-template-rows] duration-500 ease-out" style="grid-template-rows: 0fr">
+            <div class="overflow-hidden">
+              <div class="proj-body pb-8 md:pl-[5.5rem] transition-opacity duration-300 opacity-0" inert>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
+                  {p.photos.map((n, j) => (
+                    <button type="button" data-index={j} class="proj-photo elevate-flat aspect-[4/3] bg-stone-200 overflow-hidden group/foto relative cursor-pointer">
+                      <img
+                        data-src={photo(n).src}
+                        data-srcset={photo(n).srcset}
+                        sizes="(min-width: 768px) 260px, 45vw"
+                        alt={`${p.title} – foto ${j + 1}`}
+                        width="400"
+                        height="300"
+                        decoding="async"
+                        class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover/foto:scale-105"
+                      />
+                      <div class="absolute inset-0 bg-stone-950/0 group-hover/foto:bg-stone-950/25 transition-colors duration-300"></div>
+                    </button>
+                  ))}
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-8 items-start">
+                  <div>
+                    <p class="eyebrow mb-3">Rozsah prací</p>
+                    <ul class="flex flex-col gap-1.5">
+                      {p.scope.map((s) => (
+                        <li class="font-body text-sm text-stone-600 flex gap-2.5">
+                          <span class="text-brand-700 flex-shrink-0">—</span>
+                          <span>{s}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div class="border border-stone-300 divide-y divide-stone-300 min-w-[11rem]">
+                    {[['Rok', p.year], ['Lokalita', p.location], ['Typ', p.tag], ['Fotografií', String(p.photos.length)]].map(([label, value]) => (
+                      <div class="flex justify-between gap-6 px-4 py-2">
+                        <span class="font-display uppercase tracking-[0.16em] text-[0.65rem] text-stone-500">{label}</span>
+                        <span class="font-body text-xs text-stone-800">{value}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <a href="#kontakt" class="btn btn-sm btn-primary mt-6 inline-flex min-h-[44px]">Chci podobnou realizaci →</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .proj { transition: opacity 0.3s ease; }
+  @media (hover: hover) {
+    .proj-list:hover .proj:not(:hover):not(.is-open) { opacity: 0.45; }
+    .proj:hover .proj-thumb { transform: scale(1.05); }
+  }
+  .proj.is-open .proj-thumb { transform: scale(1.05); }
+  .proj.is-open .proj-num,
+  .proj.is-open .proj-title,
+  .proj.is-open .proj-arrow { color: var(--accent-text); }
+  .proj.is-open .proj-arrow { transform: rotate(90deg); }
+</style>
+
+<script>
+  const rows = [...document.querySelectorAll('.proj')];
+
+  const setOpen = (row, open) => {
+    row.classList.toggle('is-open', open);
+    row.querySelector('.proj-toggle').setAttribute('aria-expanded', String(open));
+    row.querySelector('.proj-panel').style.gridTemplateRows = open ? '1fr' : '0fr';
+    const body = row.querySelector('.proj-body');
+    body.classList.toggle('opacity-0', !open);
+    body.classList.toggle('opacity-100', open);
+    body.inert = !open;
+    // Fotky se stahují až při prvním rozbalení
+    if (open) {
+      for (const img of row.querySelectorAll('img[data-src]')) {
+        img.srcset = img.dataset.srcset;
+        img.src = img.dataset.src;
+        img.removeAttribute('data-src');
+      }
+    }
+  };
+
+  for (const row of rows) {
+    row.querySelector('.proj-toggle').addEventListener('click', () => {
+      const open = !row.classList.contains('is-open');
+      for (const r of rows) if (r !== row) setOpen(r, false);
+      setOpen(row, open);
+    });
+    const photos = JSON.parse(row.dataset.photos);
+    for (const btn of row.querySelectorAll('.proj-photo')) {
+      btn.addEventListener('click', () => {
+        window.openLightbox?.(photos, Number(btn.dataset.index), row.dataset.title);
+      });
+    }
+  }
+</script>

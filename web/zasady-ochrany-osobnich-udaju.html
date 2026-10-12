@@ -1,0 +1,302 @@
+<!doctype html>
+<!--
+  Statická stránka mimo React app — nepotřebuje build ani routing.
+  POZOR: text je připravený podle standardní praxe pro kontaktní formulář,
+  před spuštěním webu ho má odsouhlasit klient (hlavně doba uchování
+  a seznam zpracovatelů).
+-->
+<html lang="cs">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, follow" />
+    <title>Ochrana osobních údajů | Šedivák Stavby s.r.o.</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <style>
+      @font-face {
+        font-family: 'Inter';
+        font-style: normal;
+        font-display: swap;
+        font-weight: 100 900;
+        src: url('/fonts/inter-latin.woff2') format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+          U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC,
+          U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: 'Inter';
+        font-style: normal;
+        font-display: swap;
+        font-weight: 100 900;
+        src: url('/fonts/inter-latin-ext.woff2') format('woff2');
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7,
+          U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F,
+          U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+          U+A720-A7FF;
+      }
+      @font-face {
+        font-family: 'Archivo';
+        font-style: normal;
+        font-display: swap;
+        font-weight: 100 900;
+        src: url('/fonts/archivo-latin.woff2') format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+          U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC,
+          U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: 'Archivo';
+        font-style: normal;
+        font-display: swap;
+        font-weight: 100 900;
+        src: url('/fonts/archivo-latin-ext.woff2') format('woff2');
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7,
+          U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F,
+          U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+          U+A720-A7FF;
+      }
+
+      /* Tokeny 1:1 podle src/styles/global.css (--accent = --accent-text) */
+      :root {
+        --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        --font-display: 'Archivo', 'Arial Narrow', system-ui, sans-serif;
+        --bg: #f5f5f4;
+        --surface: #ffffff;
+        --surface-2: #ececeb;
+        --border: #d6d3d1;
+        --text: #1c1917;
+        --text-muted: #57534e;
+        --accent: #6E5C25;
+      }
+
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--font-body);
+        font-size: 1.0625rem;
+        line-height: 1.65;
+        -webkit-font-smoothing: antialiased;
+      }
+      .wrap {
+        max-width: 46rem;
+        margin: 0 auto;
+        padding: 3rem 1.5rem 5rem;
+      }
+      h1, h2 {
+        font-family: var(--font-display);
+        text-transform: uppercase;
+        letter-spacing: -0.02em;
+        line-height: 1.08;
+      }
+      h1 {
+        font-size: clamp(2rem, 1.3rem + 3.1vw, 3.5rem);
+        font-weight: 800;
+        margin: 0 0 0.5rem;
+      }
+      h2 {
+        font-size: 1.15rem;
+        font-weight: 700;
+        margin: 2.75rem 0 0.75rem;
+      }
+      .eyebrow {
+        font-family: var(--font-display);
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        font-size: 0.75rem;
+        color: var(--accent);
+        margin: 0 0 0.5rem;
+      }
+      .lead {
+        color: var(--text-muted);
+        margin: 0 0 2.5rem;
+        max-width: 68ch;
+      }
+      p { max-width: 68ch; }
+      a { color: var(--accent); }
+      ul { padding-left: 1.2rem; max-width: 68ch; }
+      li { margin: 0.35rem 0; }
+      .back {
+        display: inline-block;
+        margin-bottom: 2.5rem;
+        font-family: var(--font-display);
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        font-weight: 700;
+        font-size: 0.75rem;
+        text-decoration: none;
+      }
+      .back:hover { text-decoration: underline; }
+
+      /* Výkresový list – stejný jazyk jako sekce Kontakt */
+      .sheet {
+        background-color: var(--surface);
+        border: 1px solid var(--border);
+      }
+      .sheet-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0.75rem 1.5rem;
+        border-bottom: 1px solid var(--border);
+        background-color: var(--surface-2);
+        font-family: var(--font-display);
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        font-size: 0.7rem;
+      }
+      .sheet-body { padding: 1.5rem; }
+      .sheet-body p { margin: 0; }
+      dl.ids {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        margin: 0;
+      }
+      @media (min-width: 640px) {
+        dl.ids { grid-template-columns: repeat(2, 1fr); }
+      }
+      dt {
+        font-family: var(--font-display);
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        font-size: 0.65rem;
+        color: var(--text-muted);
+        margin-bottom: 0.15rem;
+      }
+      dd { margin: 0; font-size: 0.95rem; }
+
+      footer {
+        margin-top: 3.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--border);
+        font-size: 0.8rem;
+        color: var(--text-muted);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <a class="back" href="/">← Zpět na sedivakstavby.cz</a>
+
+      <p class="eyebrow">Právní informace</p>
+      <h1>Ochrana osobních údajů</h1>
+      <p class="lead">
+        Jak nakládáme s údaji, které nám pošlete přes poptávkový formulář,
+        e-mailem nebo telefonicky. Účinné od 4. 10. 2026.
+      </p>
+
+      <div class="sheet">
+        <div class="sheet-head">
+          <span style="color: var(--accent)">Správce údajů</span>
+          <span style="color: var(--text-muted)">GDPR</span>
+        </div>
+        <div class="sheet-body">
+          <dl class="ids">
+            <div>
+              <dt>Společnost</dt>
+              <dd>Šedivák stavby s.r.o.</dd>
+            </div>
+            <div>
+              <dt>IČO</dt>
+              <dd>22407570</dd>
+            </div>
+            <div>
+              <dt>Sídlo</dt>
+              <dd>Dolní náměstí 46, 330 33 Město Touškov</dd>
+            </div>
+            <div>
+              <dt>Kontakt</dt>
+              <dd>
+                <a href="mailto:info@sedivakstavby.cz">info@sedivakstavby.cz</a><br />
+                <a href="tel:+420731115020">731 115 020</a>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+
+      <h2>Jaké údaje zpracováváme</h2>
+      <ul>
+        <li>jméno a příjmení, které v poptávce uvedete,</li>
+        <li>e-mailovou adresu,</li>
+        <li>telefonní číslo, pokud ho vyplníte (není povinné),</li>
+        <li>popis projektu a další údaje, které nám sami sdělíte v e-mailu nebo po telefonu.</li>
+      </ul>
+
+      <h2>Proč je zpracováváme</h2>
+      <p>
+        Výhradně proto, abychom vás mohli kontaktovat, prohlédnout si stavbu,
+        připravit cenovou nabídku a domluvit se na realizaci. Údaje nepoužíváme
+        k rozesílání obchodních sdělení a nikomu je neprodáváme.
+      </p>
+
+      <h2>Na jakém právním základě</h2>
+      <p>
+        Na základě čl. 6 odst. 1 písm. b) GDPR — zpracování je nutné pro
+        provedení opatření přijatých před uzavřením smlouvy na vaši žádost.
+        Nepotřebujeme k tomu tedy váš zvláštní souhlas; odeslaná poptávka je
+        zároveň vaší žádostí, abychom se vám ozvali.
+      </p>
+
+      <h2>Jak dlouho je uchováváme</h2>
+      <p>
+        Nerealizované poptávky mažeme nejpozději do 2 let od poslední
+        komunikace. Pokud dojde k realizaci zakázky, uchováváme související
+        doklady po dobu stanovenou daňovými a účetními předpisy (zpravidla
+        10 let u daňových dokladů).
+      </p>
+
+      <h2>Komu se údaje mohou dostat</h2>
+      <ul>
+        <!-- Odesílání formuláře: nechat jen řádek se službou, kterou web používá
+             (přepínač FORM_SERVICE v src/components/Contact.jsx). Varianta pro Resend:
+        <li>službě Resend, která odbavuje odeslání poptávkového formuláře,</li>
+        -->
+        <li>službě EmailJS, která odbavuje odeslání poptávkového formuláře,</li>
+        <li>poskytovateli e-mailové schránky a webhostingu,</li>
+        <li>účetní firmě, pokud dojde k vystavení dokladu,</li>
+        <li>orgánům veřejné moci, pokud to ukládá zákon.</li>
+      </ul>
+      <p>
+      Služba pro odeslání formuláře sídlí v USA, takže údaje z poptávky
+      mohou být zpracovány i mimo Evropský hospodářský prostor. Děje se tak
+      jen se zárukami, které vyžaduje GDPR (standardní smluvní doložky
+      schválené Evropskou komisí). Jinam mimo EHP údaje nepředáváme.
+    </p>
+
+      <h2>Vaše práva</h2>
+      <p>Kdykoli máte právo:</p>
+      <ul>
+        <li>vědět, jaké údaje o vás vedeme, a získat jejich kopii,</li>
+        <li>nechat je opravit, pokud nejsou přesné,</li>
+        <li>nechat je vymazat nebo omezit jejich zpracování,</li>
+        <li>vznést námitku proti zpracování,</li>
+        <li>na přenositelnost údajů.</li>
+      </ul>
+      <p>
+        Stačí napsat na
+        <a href="mailto:info@sedivakstavby.cz">info@sedivakstavby.cz</a>.
+        Když budete mít pocit, že s údaji nenakládáme správně, můžete se obrátit
+        na Úřad pro ochranu osobních údajů, Pplk. Sochora 27, 170 00 Praha 7,
+        <a href="https://www.uoou.cz" target="_blank" rel="noopener noreferrer">uoou.cz</a>.
+      </p>
+
+      <h2>Cookies a měření návštěvnosti</h2>
+      <p>
+        Web nepoužívá žádné cookies, neměří návštěvnost a do vašeho
+      prohlížeče nic neukládá.
+      </p>
+
+      <footer>
+        © <span id="rok">2026</span> Šedivák stavby s.r.o. · Dolní náměstí 46,
+        330 33 Město Touškov
+        <script>
+          document.getElementById('rok').textContent = new Date().getFullYear()
+        </script>
+      </footer>
+    </div>
+  </body>
+</html>
